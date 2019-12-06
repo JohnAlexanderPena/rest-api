@@ -1,20 +1,44 @@
 //Serve static conent
 
-let express = require('express');
+const express = require('express');
+const app = express();
 
-let app = express();
+const personRoute = require('./routes/person');
+const customerRoute = require('./routes/customer');
+const path = require('path')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser');
 
-let personRoute = require('./routes/person');
 
-let path = require('path')
 
-app.use((req, res, next) => {
-  console.log(`${new Date().toString()} => ${req.originalUrl}`)
-  // res.send('')
-  next()
-});
+//Body parser middleware
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+
+
+// DB Config
+const db = require('../config/keys.js').mongoURI
+
+// Connect to MongoDB
+mongoose
+  .connect(db,{
+useUnifiedTopology: true,
+useNewUrlParser: true,
+// useFindAndModify: false,
+})
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err))
+
+// app.use((req, res, next) => {
+//   console.log(`${new Date().toString()} => ${req.originalUrl}`)
+//   // res.send('')
+//   next()
+// });
+
 
 app.use(personRoute)
+app.use(customerRoute)
 app.use(express.static('public'))
 
 //Handler for 404 requests

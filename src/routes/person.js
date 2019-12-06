@@ -1,5 +1,11 @@
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
+const keys = require('../../config/keys');
+
+
+
+//Load Customer
+// const Customer = require('../models/Customer')
 
 
 // QueryString => query property on the request object
